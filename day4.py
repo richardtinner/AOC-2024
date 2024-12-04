@@ -3,6 +3,13 @@ import re
 ws = []
 t_ws= []
 
+def count_diag2(bld, brd):
+    count = 0   
+    if (bld == "MAS" or bld == "SAM") and (brd == "MAS" or brd == "SAM"):
+            count = 1
+
+    return count
+
 def count_diag(trd,tld,brd,bld):
     count = 0
     
@@ -27,6 +34,7 @@ with open("day4-data.txt") as f:
 t_ws = [''.join(s) for s in zip(*ws)]
 count = 0
 
+# Part 1
 # count horizontals
 for r in ws:
     count += r.count("XMAS")
@@ -40,12 +48,8 @@ for r in t_ws:
 # count the diagonals
 # i is horizontal index, j is vertical index
 for i in range(0, len(ws[0])):
-    tld = trd = bld = brd = ""
     for j in range(0, len(ws[0])):
         # This is a valid starting character
-
-        if j == 9 and i == 9:
-            print("br")
         if ws[i][j] != 'X':
             continue
         # build diagonal strings
@@ -63,3 +67,24 @@ for i in range(0, len(ws[0])):
 
 
 print("Day4 part 1, count = ", count)
+
+# Part 2
+count = 0
+for i in range(1, len(ws[0])-1):
+
+    for j in range(1, len(ws[0])-1):
+        # This is a valid starting character
+        if ws[i][j] != 'A':
+            continue
+
+        # build diagonal strings
+        tld = trd = bld = brd = ""
+        bld = ws[i+1][j-1] + ws[i][j] + ws[i-1][j+1]
+        brd = ws[i+1][j+1] + ws[i][j] + ws[i-1][j-1]
+
+        count += count_diag2(bld, brd)
+
+
+print("Day4 part 2, count = ", count)
+
+
