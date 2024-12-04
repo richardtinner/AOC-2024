@@ -56,46 +56,5 @@ for r in reports:
             if check_report(r1) == -1 or check_report(r2) == -1:
                 total_safe += 1
 
-    
-print("Part 2, total safe = ", total_safe)
-        
-
-
-# Part 2 - Iterate over the array
-total_safe = 0
-for r in reports:
-    asc = (r[1] - r[0]) > 0
-    safe = True
-    levels_removed = 0
-    for i in range(len(r)-1):
-        if 1 <= abs(r[i+1] - r[i]) <= 3:
-            if ((r[i+1] - r[i]) > 0) == asc:
-                continue
-        
-        # if we have alrerady removed a level, try and remove the second level and test again
-        if (levels_removed == 0):
-            levels_removed = 1
-            if i == len(r) - 2:
-                continue
-            else:
-                if 1 <= abs(r[i+2] - r[i]) <= 3:
-                    if i == 0:
-                        asc = (r[2] - r[0]) > 0
-                    if ((r[i+2] - r[i]) > 0) == asc:
-                        i += 1
-                        continue
-        
-            # if were are testing the first 2 levels then can try removing the first level 
-            if i == 0:
-                asc = (r[2] - r[1]) > 0
-                continue
-
-        safe = False
-        break
-
-    if safe:
-        total_safe += 1
-    
-
 print("Part 2, total safe = ", total_safe)
 
