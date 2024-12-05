@@ -3,13 +3,6 @@ import re
 ws = []
 t_ws= []
 
-def count_diag2(bld, brd):
-    count = 0   
-    if (bld == "MAS" or bld == "SAM") and (brd == "MAS" or brd == "SAM"):
-            count = 1
-
-    return count
-
 def count_diag(trd,tld,brd,bld):
     count = 0
     
@@ -82,7 +75,8 @@ for i in range(1, len(ws[0])-1):
         bld = ws[i+1][j-1] + ws[i][j] + ws[i-1][j+1]
         brd = ws[i+1][j+1] + ws[i][j] + ws[i-1][j-1]
 
-        count += count_diag2(bld, brd)
+        if (bld == "MAS" or bld == "SAM") and (brd == "MAS" or brd == "SAM"):
+            count += 1
 
 
 print("Day4 part 2, count = ", count)
