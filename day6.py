@@ -69,7 +69,7 @@ def get_move(row, col):
 
 start_time =time.time()
 map = []
-row = col = 0
+start_row = start_col = 0
 with open("day6-data.txt") as f:
 
     # Read the file and initialise the start pos
@@ -77,22 +77,22 @@ with open("day6-data.txt") as f:
     for line in f.readlines():
         map.append(line.strip('\n'))
         if line.find('>') != -1:
-            col = line.find('>')
-            row = i
+            start_col = line.find('>')
+            start_row = i
         elif line.find('<') != -1:
-            col = line.find('<')
-            row = i
+            start_col = line.find('<')
+            start_row = i
         elif line.find('^') != -1:
-            col = line.find('^')
-            row = i
+            start_col = line.find('^')
+            start_row = i
         elif line.find('v') != -1:
-            col = line.find('v')
-            row = i
+            start_col = line.find('v')
+            start_row = i
         i += 1
 
 original_map = copy.deepcopy(map)
-start_row = row
-start_col = col
+row = start_row
+col = start_col
 
 # Day 1
 while row > -1 and row < len(map) and col > -1 and col < len(map[0]):
