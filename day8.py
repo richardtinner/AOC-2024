@@ -13,14 +13,12 @@ def check_pair(a, b):
     # start at point a and map out the line through point b in both directions, each until we leave the grid
     posy = a[0]
     posx = a[1]
-    count = 0
     while posy >= 0 and posy < len(map) and posx >= 0 and posx < len(map[1]):
         d1 = math.sqrt((a[0]-posy) * (a[0]-posy) + (a[1]-posx) * (a[1]-posx))
         d2 = math.sqrt((b[0]-posy) * (b[0]-posy) + (b[1]-posx) * (b[1]-posx))
         if d1 == 2 * d2 or d2 == 2 * d1:
                 if (posy, posx) not in antinodes:
                      antinodes.append((posy, posx))
-                     count+=1
         posy += dy
         posx += dx
 
@@ -32,11 +30,10 @@ def check_pair(a, b):
         if d1 == 2 * d2 or d2 == 2 * d1:
                 if (posy, posx) not in antinodes:
                      antinodes.append((posy, posx))
-                     count+=1
         posy -= dy
         posx -= dx
     
-    return count
+    return
 
 def check_pair_pt2(a, b):
     dy = a[0] - b[0]
