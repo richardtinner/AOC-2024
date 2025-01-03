@@ -64,8 +64,7 @@ def countNumMade(fileName:str):
     count = 0
     made = {}
     for search in toSearch:
-        nm = numMakes(search,towels,made)
-        count += nm
+        count += numMakes(search,towels,made)
     return count
  
 startTime = time.time()
