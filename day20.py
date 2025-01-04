@@ -9,7 +9,6 @@ class Grid:
     def __init__(self, filename):
         with open(filename) as f:
             # Read the file
-            bytes_read = 0
             for y, line in enumerate(f.readlines()):
                 self.rows.append([])
                 for x, c in enumerate(line.strip('\n')):
@@ -74,66 +73,61 @@ class Grid:
 
         if self.end in cost_so_far:
             path = self.get_route(current, came_from)
-            return cost_so_far[self.end], path
+            return cost_so_far[self.end], path, cost_so_far
         
         else:
-            return -1, []
-        
-    def get_cheats(self):
-        cheats = set()
-        for w in self.walls:
-            if w[0] == 0 or w[1] == 0 or w[0] == len(self.rows)-1 or w[1] == len(self.rows[0])-1:
-                continue
-            if ((w[0], w[1]+1) in self.spaces and (w[0], w[1]-1) in self.spaces) or \
-                ((w[0]+1, w[1]) in self.spaces and (w[0]-1, w[1]) in self.spaces):
-                cheats.add(w)
-        return(cheats)
-
+            return -1, [], []
             
-            
-    def solve_with_cheats(self, time_saving = 100):
-        # First solve without cheats to get baseline time
-        base_t, _ = self.solve()
+    def get_shortcuts(self, node, max = 2):
+        shortcuts = []
+        for x in range(node[0] - max, node[0] + max + 1):
+            for y in range(node[1] - max, node[1] + max + 1):
+                if 0 <= x <= len(self.rows[0]) and 0 <= y <= len(self.rows):
+                    if self.get_taxi_distance(node, (x,y)) <= max:
+                        if (x, y) in self.spaces:
+                            shortcuts.append((x, y))
+        return shortcuts
+    
+    def get_taxi_distance(self, nodeA, nodeB):
+        dx = abs(nodeA[0] - nodeB[0])
+        dy = abs(nodeA[1] - nodeB[1])
+        return dx + dy
+    
+    def solve_with_cheats(self, max_cheat_time, target_time_saving = 0):
+        # first solve the maze
+        base_t, route, cost_so_far = self.solve()
         print("base time = ", base_t)
         solutions = {}
 
-        cheats = self.get_cheats()
-        print("num cheats = ", len(cheats))
-        c = 0
-        for cheat in cheats:
-            c+=1
-            if c % 100 == 0:
-                print(c)
-            # apply cheat
-            self.walls.remove(cheat)
-            self.spaces.add(cheat)
-            self.rows[cheat[1]][cheat[0]] = '.'
-
-            t, _ = self.solve()
-            if t <= base_t - time_saving:
-                if base_t - t in solutions:
-                    solutions[base_t-t].append(cheat)
-                else:
-                    solutions[base_t-t] = [cheat]
-
-
-            # cancel cheat
-            self.walls.add(cheat)
-            self.spaces.remove(cheat)
-            self.rows[cheat[1]][cheat[0]] = '#'
-
+        # iterate through the solution and see if there is a 2 space jump from any position that will save time
+        for node in route:
+            for jump_to in self.get_shortcuts(node, max_cheat_time):
+                if cost_so_far[jump_to] > cost_so_far[node]: # only jump forward in route
+                    time_saving = cost_so_far[jump_to] - cost_so_far[node] - self.get_taxi_distance(node, jump_to)
+                    if time_saving >= target_time_saving: # jump has saved time
+                        route_time = cost_so_far[self.end] - (cost_so_far[jump_to] - cost_so_far[node] + 2)
+                        if time_saving in solutions:
+                            solutions[time_saving].append(jump_to)
+                        else:
+                            solutions[time_saving] = [jump_to]
+        
         total_sol = 0
         for k, v in sorted(solutions.items()):
-            print(k, len(v))
+            #print(k, len(v))
             total_sol+=len(v)
 
         return total_sol
 
+#g = Grid("day20-sample.txt")
+#print("Part1 sample data: ", g.solve_with_cheats(2, 0))
+
+#g = Grid("day20-data.txt")
+#print("Part1 real data: ", g.solve_with_cheats(2, 100))
 
 #g = Grid("day20-sample.txt")
-#print("Part1 sample data: ", g.solve_with_cheats(0))
+#print("Part2 sample data: ", g.solve_with_cheats(20, 0))
 
 g = Grid("day20-data.txt")
-print("Part1 real data: ", g.solve_with_cheats(100))
+print("Part1 real data: ", g.solve_with_cheats(20, 100))
 
 
