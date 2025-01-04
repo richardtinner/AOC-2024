@@ -47,7 +47,6 @@ class Grid:
     
     def solve(self):
         frontier = []
-        direction = (1, 0)
         heapq.heappush(frontier, (0, self.start))
         came_from = {}
         cost_so_far = {}
