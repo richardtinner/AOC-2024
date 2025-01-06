@@ -30,9 +30,6 @@ def generate_secrets(initial, num = 2000):
 
     return secrets
 
-
-
-
 secrets = []
 with open("day22-data.txt") as f:
     initial_secrets = [int(line) for line in f.readlines()]
@@ -51,9 +48,6 @@ with open("day22-data.txt") as f:
         for i in range(1, len(s)-3):
             sequence = (s[i][2], s[i+1][2], s[i+2][2], s[i+3][2])
             price = s[i+3][1]
-
-            if sequence == (-2, 1, -1, 3):
-                pass
             if sequence not in buyer_sequences: # only add a sequence once for each buyer
                 buyer_sequences.add(sequence)
                 if sequence not in sequences:
@@ -62,8 +56,7 @@ with open("day22-data.txt") as f:
                     sequences[sequence] += price
     
     sorted_sequences = sorted(sequences.items(), key=lambda x:x[1])
-    #print(sorted_sequences)
 
-    print(sorted_sequences[-1])
+    print("Day22 part 1:", sorted_sequences[-1][1])
 
 
