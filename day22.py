@@ -57,6 +57,4 @@ with open("day22-data.txt") as f:
     
     sorted_sequences = sorted(sequences.items(), key=lambda x:x[1])
 
-    print("Day22 part 1:", sorted_sequences[-1][1])
-
-
+    print("Day22 part 2:", sorted_sequences[-1][1])
