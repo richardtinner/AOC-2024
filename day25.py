@@ -9,7 +9,7 @@ with open("day25-data.txt") as file:
         if (lines[i] == "#####\n"):
             locks.append(pins) # lock
         elif lines[i] == ".....\n":
-            keys.append(pins) #key
+            keys.append(pins) # key
  
     sum  = 0
     for lock in locks:
